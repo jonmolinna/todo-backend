@@ -1,0 +1,18 @@
+import { Router } from "express";
+
+import user from "./user";
+import auth from "./auth";
+import list from "./list";
+
+const router = Router();
+
+// User Controller
+router.use("/user", user);
+
+// Auth Controller
+router.use("/auth", auth);
+
+// List Controller
+router.use("/list", list);
+
+export default router;

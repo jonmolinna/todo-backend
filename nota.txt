@@ -1,0 +1,20 @@
+npm install -g typeorm
+npm install -D typescript@latest ts-node@latest
+typeorm init
+npm install
+npm install pg => postsql
+npm install express
+npm install -D @types/express
+npm install -D nodemon
+npm install -D @types/uuid
+npm install class-validator
+npm install cors
+npm install bcryptjs
+npm install jsonwebtoken
+npm install @types/jsonwebtoken -D
+
+Para ejecutar
+-------------------------
+npm start
+npm run dev
+npm run build
