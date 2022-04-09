@@ -1,0 +1,10 @@
+import { Router } from "express";
+import { TasksController } from "../controller/TasksController";
+import { checkJwt } from "../utils/jwt";
+
+const router = Router();
+
+// Task Router
+router.post("/", [checkJwt], TasksController.addTask);
+
+export default router;

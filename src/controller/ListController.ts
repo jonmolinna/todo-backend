@@ -36,13 +36,15 @@ export class ListController {
     const listRepository = AppDataSource.getRepository(Lists);
     const { id: userId } = res.locals.userToken;
 
-    console.log("USER ID", userId);
-
     try {
       const list = await listRepository.find({
-        relations: ["user"],
         order: {
           createdAt: "DESC",
+        },
+        where: {
+          user: {
+            id: userId,
+          },
         },
       });
 
@@ -59,11 +61,18 @@ export class ListController {
     const { idList } = req.params;
 
     try {
-      const list = await listRepository.findOne({
-        where: { id: Number(idList) },
+      const list = await listRepository.delete({
+        id: parseInt(idList),
+        user: {
+          id: userId,
+        },
       });
-      console.log("YOOO", idList);
-      console.log(">>>>>", list);
+
+      if (list.affected === 0) {
+        return res.status(404).json({ msg: "List not found" });
+      } else if (list.affected === 1) {
+        return res.status(200).json({ msg: "List deleted" });
+      }
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
