@@ -3,8 +3,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Lists } from "./Lists";
+import { Users } from "./User";
 
 @Entity()
 export class Tasks {
@@ -27,4 +30,10 @@ export class Tasks {
   @Column()
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => Users, (user) => user.tasks)
+  user: Users;
+
+  @ManyToOne(() => Lists, (list) => list.tasks)
+  list: Tasks;
 }

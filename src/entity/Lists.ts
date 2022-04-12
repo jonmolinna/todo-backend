@@ -4,8 +4,10 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Tasks } from "./Tasks";
 import { Users } from "./User";
 
 @Entity()
@@ -24,4 +26,7 @@ export class Lists {
 
   @ManyToOne(() => Users, (user) => user.lists)
   user: Users;
+
+  @OneToMany(() => Tasks, (task) => task.id)
+  tasks: Tasks[];
 }

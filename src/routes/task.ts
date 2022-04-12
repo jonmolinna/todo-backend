@@ -5,6 +5,9 @@ import { checkJwt } from "../utils/jwt";
 const router = Router();
 
 // Task Router
-router.post("/", [checkJwt], TasksController.addTask);
+router.post("/:idList", [checkJwt], TasksController.addTask);
+router.get("/:idList", [checkJwt], TasksController.getAllTaskByListAndUser);
+router.delete("/:idList", [checkJwt], TasksController.deleteTask);
+router.put("/:idList", [checkJwt], TasksController.updatedTask);
 
 export default router;

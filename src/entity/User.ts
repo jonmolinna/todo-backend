@@ -14,6 +14,7 @@ import {
 } from "../decorator/Validation";
 import * as bcrypt from "bcryptjs";
 import { Lists } from "./Lists";
+import { Tasks } from "./Tasks";
 
 @Entity()
 export class Users {
@@ -51,6 +52,9 @@ export class Users {
 
   @OneToMany(() => Lists, (list) => list.id)
   lists: Lists[];
+
+  @OneToMany(() => Tasks, (task) => task.id)
+  tasks: Tasks[];
 
   hashPassword(): void {
     const salt = bcrypt.genSaltSync(10);
