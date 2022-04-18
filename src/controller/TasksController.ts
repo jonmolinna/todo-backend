@@ -10,25 +10,21 @@ export class TasksController {
     const { id: userId } = res.locals.userToken;
 
     try {
-      const newlist = taskRepository.create({
-        task,
-        important: important ? important : false,
-        completed: false,
-        user: userId,
-        list: idList,
-      });
-
-      const errors = (
-        await validate(newlist, {
-          validationError: { target: false, value: false },
-        })
-      ).map((e) => e.constraints);
-
-      if (errors.length > 0) throw errors;
-
-      await taskRepository.save(newlist);
-
-      return res.status(200).json({ list: newlist });
+      // const newlist = taskRepository.create({
+      //   task,
+      //   important: important ? important : false,
+      //   completed: false,
+      //   user: userId,
+      //   list: idList,
+      // });
+      // const errors = (
+      //   await validate(newlist, {
+      //     validationError: { target: false, value: false },
+      //   })
+      // ).map((e) => e.constraints);
+      // if (errors.length > 0) throw errors;
+      // await taskRepository.save(newlist);
+      // return res.status(200).json({ list: newlist });
     } catch (err) {
       return res.status(500).json(err);
     }
@@ -39,23 +35,29 @@ export class TasksController {
     const { idList } = req.params;
     const { id: userId } = res.locals.userToken;
 
-    try {
-      const tasks = await taskRepository.findOneOrFail({
-        order: {
-          createdAt: "DESC",
-        },
-        where: {
-          user: {
-            id: userId,
-          },
-          list: {
-            id: parseInt(idList),
-          },
-        },
-      });
+    console.log("YOOOO", idList);
 
-      return res.status(200).json({ tasks });
+    try {
+      //   const tasks = await taskRepository.find({
+      //     relations: {
+      //       user: true,
+      //       list: true,
+      //     },
+      //     where: {
+      //       user: {
+      //         id: userId,
+      //       },
+      //       list: {
+      //         id: parseInt(idList),
+      //       },
+      //     },
+      //     order: {
+      //       createdAt: "DESC",
+      //     },
+      //   });
+      // return res.status(200).json({ tasks });
     } catch (err) {
+      console.log(err);
       return res.status(500).json(err);
     }
   };
@@ -66,21 +68,20 @@ export class TasksController {
     const { id: userId } = res.locals.userToken;
     const { idTask } = req.body;
     try {
-      const task = await taskRepository.delete({
-        id: idTask,
-        user: {
-          id: userId,
-        },
-        list: {
-          id: parseInt(idList),
-        },
-      });
-
-      if (task.affected === 0) {
-        return res.status(404).json({ msg: "Task not found" });
-      } else if (task.affected === 1) {
-        return res.status(200).json({ msg: "Task deleted" });
-      }
+      // const task = await taskRepository.delete({
+      //   id: idTask,
+      //   user: {
+      //     id: userId,
+      //   },
+      //   list: {
+      //     id: parseInt(idList),
+      //   },
+      // });
+      // if (task.affected === 0) {
+      //   return res.status(404).json({ msg: "Task not found" });
+      // } else if (task.affected === 1) {
+      //   return res.status(200).json({ msg: "Task deleted" });
+      // }
     } catch (err) {
       return res.status(500).json(err);
     }
@@ -93,20 +94,20 @@ export class TasksController {
     const { idTask, important, completed } = req.body;
 
     try {
-      const task = await taskRepository.findOneBy({
-        id: idTask,
-        user: {
-          id: userId,
-        },
-        list: {
-          id: parseInt(idList),
-        },
-      });
+      // const task = await taskRepository.findOneBy({
+      //   id: idTask,
+      //   user: {
+      //     id: userId,
+      //   },
+      //   list: {
+      //     id: parseInt(idList),
+      //   },
+      // });
 
-      task.completed = completed;
-      task.important = important;
+      // task.completed = completed;
+      // task.important = important;
 
-      await taskRepository.save(task);
+      // await taskRepository.save(task);
 
       return res.json({ msg: "Updated Task" });
     } catch (err) {

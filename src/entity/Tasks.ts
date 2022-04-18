@@ -31,9 +31,6 @@ export class Tasks {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Users, (user) => user.tasks)
-  user: Users;
-
-  @ManyToOne(() => Lists, (list) => list.tasks)
-  list: Tasks;
+  @ManyToOne(() => Lists)
+  list: Lists;
 }

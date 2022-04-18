@@ -24,9 +24,9 @@ export class Lists {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Users, (user) => user.lists)
+  @ManyToOne(() => Users)
   user: Users;
 
-  @OneToMany(() => Tasks, (task) => task.id)
+  @OneToMany(() => Tasks, (task) => task.list)
   tasks: Tasks[];
 }

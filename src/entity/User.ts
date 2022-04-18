@@ -50,11 +50,8 @@ export class Users {
   @CreateDateColumn()
   createdAt: Date;
 
-  @OneToMany(() => Lists, (list) => list.id)
+  @OneToMany(() => Lists, (list) => list.user)
   lists: Lists[];
-
-  @OneToMany(() => Tasks, (task) => task.id)
-  tasks: Tasks[];
 
   hashPassword(): void {
     const salt = bcrypt.genSaltSync(10);

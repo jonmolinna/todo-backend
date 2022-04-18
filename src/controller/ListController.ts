@@ -26,7 +26,7 @@ export class ListController {
 
       await listRepository.save(list);
 
-      return res.status(200).json(list);
+      return res.status(200).json({ ...list, user: { id: userId } });
     } catch (err) {
       return res.status(500).json(err);
     }
@@ -38,13 +38,26 @@ export class ListController {
 
     try {
       const list = await listRepository.find({
+        relations: {
+          user: true,
+          tasks: true,
+        },
         order: {
-          createdAt: "DESC",
+          createdAt: "ASC",
         },
         where: {
           user: {
             id: userId,
           },
+        },
+        select: {
+          createdAt: true,
+          id: true,
+          nameList: true,
+          user: {
+            id: true,
+          },
+          tasks: true,
         },
       });
 
