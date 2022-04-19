@@ -2,86 +2,82 @@ import { validate } from "class-validator";
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { Tasks } from "../entity/Tasks";
+import { Lists } from "../entity/Lists";
 
 export class TasksController {
   static addTask = async (req: Request, res: Response) => {
     const taskRepository = AppDataSource.getRepository(Tasks);
-    const { task, important, idList } = req.body;
+    const listRepository = AppDataSource.getRepository(Lists);
     const { id: userId } = res.locals.userToken;
+    const { task, date, important, idList } = req.body;
 
     try {
-      // const newlist = taskRepository.create({
-      //   task,
-      //   important: important ? important : false,
-      //   completed: false,
-      //   user: userId,
-      //   list: idList,
-      // });
-      // const errors = (
-      //   await validate(newlist, {
-      //     validationError: { target: false, value: false },
-      //   })
-      // ).map((e) => e.constraints);
-      // if (errors.length > 0) throw errors;
-      // await taskRepository.save(newlist);
-      // return res.status(200).json({ list: newlist });
+      const list = await listRepository.findOneBy({
+        id: idList,
+        user: {
+          id: userId,
+        },
+        flag: true,
+      });
+
+      if (!list) {
+        throw { msg: "List not found" };
+      }
+
+      const newTask = taskRepository.create({
+        task,
+        important: important ? important : false,
+        completed: false,
+        date: new Date(date),
+        list: idList,
+      });
+
+      const errors = (
+        await validate(newTask, {
+          validationError: { target: false, value: false },
+        })
+      ).map((e) => e.constraints);
+
+      if (errors.length > 0) throw errors;
+
+      await taskRepository.save(newTask);
+
+      return res.status(200).json({ task: newTask });
     } catch (err) {
-      return res.status(500).json(err);
-    }
-  };
-
-  static getAllTaskByListAndUser = async (req: Request, res: Response) => {
-    const taskRepository = AppDataSource.getRepository(Tasks);
-    const { idList } = req.params;
-    const { id: userId } = res.locals.userToken;
-
-    console.log("YOOOO", idList);
-
-    try {
-      //   const tasks = await taskRepository.find({
-      //     relations: {
-      //       user: true,
-      //       list: true,
-      //     },
-      //     where: {
-      //       user: {
-      //         id: userId,
-      //       },
-      //       list: {
-      //         id: parseInt(idList),
-      //       },
-      //     },
-      //     order: {
-      //       createdAt: "DESC",
-      //     },
-      //   });
-      // return res.status(200).json({ tasks });
-    } catch (err) {
-      console.log(err);
       return res.status(500).json(err);
     }
   };
 
   static deleteTask = async (req: Request, res: Response) => {
     const taskRepository = AppDataSource.getRepository(Tasks);
-    const { idList } = req.params;
+    const listRepository = AppDataSource.getRepository(Lists);
     const { id: userId } = res.locals.userToken;
-    const { idTask } = req.body;
+    const { idTask, idList } = req.body;
     try {
-      // const task = await taskRepository.delete({
-      //   id: idTask,
-      //   user: {
-      //     id: userId,
-      //   },
-      //   list: {
-      //     id: parseInt(idList),
-      //   },
-      // });
-      // if (task.affected === 0) {
-      //   return res.status(404).json({ msg: "Task not found" });
-      // } else if (task.affected === 1) {
-      //   return res.status(200).json({ msg: "Task deleted" });
-      // }
+      const list = await listRepository.findOneBy({
+        id: idList,
+        user: {
+          id: userId,
+        },
+        flag: true,
+      });
+
+      if (!list) {
+        throw { msg: "List not found" };
+      }
+
+      const task = await taskRepository.delete({
+        id: idTask,
+        list: {
+          id: idList,
+        },
+      });
+
+      if (task.affected === 0) {
+        return res.status(404).json({ msg: "Task not found" });
+      } else if (task.affected === 1) {
+        return res.status(200).json({ msg: "Task deleted" });
+      }
     } catch (err) {
       return res.status(500).json(err);
     }
@@ -89,27 +85,36 @@ export class TasksController {
 
   static updatedTask = async (req: Request, res: Response) => {
     const taskRepository = AppDataSource.getRepository(Tasks);
-    const { idList } = req.params;
+    const listRepository = AppDataSource.getRepository(Lists);
     const { id: userId } = res.locals.userToken;
-    const { idTask, important, completed } = req.body;
+    const { idList, idTask, important, completed } = req.body;
 
     try {
-      // const task = await taskRepository.findOneBy({
-      //   id: idTask,
-      //   user: {
-      //     id: userId,
-      //   },
-      //   list: {
-      //     id: parseInt(idList),
-      //   },
-      // });
+      const list = await listRepository.findOneBy({
+        id: idList,
+        user: {
+          id: userId,
+        },
+        flag: true,
+      });
 
-      // task.completed = completed;
-      // task.important = important;
+      if (!list) {
+        throw { msg: "List not found" };
+      }
 
-      // await taskRepository.save(task);
+      const task = await taskRepository.findOneBy({
+        id: idTask,
+        list: {
+          id: idList,
+        },
+      });
 
-      return res.json({ msg: "Updated Task" });
+      task.completed = completed;
+      task.important = important;
+
+      await taskRepository.save(task);
+
+      return res.json({ task });
     } catch (err) {
       return res.status(500).json(err);
     }

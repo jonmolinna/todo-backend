@@ -14,6 +14,7 @@ export class ListController {
       const list = listRepository.create({
         nameList: nameList.trim(),
         user: userId,
+        flag: true,
       });
 
       const errors = (
@@ -26,7 +27,7 @@ export class ListController {
 
       await listRepository.save(list);
 
-      return res.status(200).json({ ...list, user: { id: userId } });
+      return res.status(200).json({ ...list, user: { id: userId }, tasks: [] });
     } catch (err) {
       return res.status(500).json(err);
     }
@@ -49,11 +50,13 @@ export class ListController {
           user: {
             id: userId,
           },
+          flag: true,
         },
         select: {
           createdAt: true,
           id: true,
           nameList: true,
+          flag: true,
           user: {
             id: true,
           },
@@ -68,26 +71,72 @@ export class ListController {
     }
   };
 
+  static getOneListByIdAndUser = async (req: Request, res: Response) => {
+    const listRepository = AppDataSource.getRepository(Lists);
+    const { id: userId } = res.locals.userToken;
+    const { idList } = req.params;
+
+    try {
+      const listId = parseInt(idList);
+
+      if (isNaN(listId)) {
+        throw { msg: "List not found" };
+      }
+
+      const list = await listRepository.findOne({
+        relations: {
+          user: true,
+          tasks: true,
+        },
+        where: {
+          user: {
+            id: userId,
+          },
+          id: listId,
+          flag: true,
+        },
+      });
+
+      if (!list) {
+        throw { msg: "List not found" };
+      }
+      return res.status(200).json(list);
+    } catch (err) {
+      // console.log(err);
+      return res.status(500).json(err);
+    }
+  };
+
   static deleteListByUserId = async (req: Request, res: Response) => {
     const listRepository = AppDataSource.getRepository(Lists);
     const { id: userId } = res.locals.userToken;
     const { idList } = req.params;
 
     try {
-      const list = await listRepository.delete({
-        id: parseInt(idList),
+      const listId = parseInt(idList);
+
+      if (isNaN(listId)) {
+        throw { msg: "List not found" };
+      }
+
+      const list = await listRepository.findOneBy({
+        id: listId,
         user: {
           id: userId,
         },
+        flag: true,
       });
 
-      if (list.affected === 0) {
-        return res.status(404).json({ msg: "List not found" });
-      } else if (list.affected === 1) {
-        return res.status(200).json({ msg: "List deleted" });
+      if (!list) {
+        throw { msg: "List not found" };
       }
+
+      list.flag = false;
+      await listRepository.save(list);
+
+      return res.status(200).json({ msg: "Delete List" });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return res.status(500).json(err);
     }
   };

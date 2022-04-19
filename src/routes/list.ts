@@ -7,6 +7,7 @@ const router = Router();
 // List Router
 router.post("/", [checkJwt], ListController.addList);
 router.get("/", [checkJwt], ListController.getListAllByUser);
-router.delete("/:idList", [checkJwt], ListController.deleteListByUserId);
+router.get("/:idList", [checkJwt], ListController.getOneListByIdAndUser);
+router.put("/:idList", [checkJwt], ListController.deleteListByUserId);
 
 export default router;

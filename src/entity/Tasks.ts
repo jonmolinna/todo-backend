@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, Length } from "class-validator";
+import { IsBoolean, IsDate, IsNotEmpty, Length } from "class-validator";
 import {
   Column,
   CreateDateColumn,
@@ -6,8 +6,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { IsMinDate } from "../decorator/Validation";
 import { Lists } from "./Lists";
-import { Users } from "./User";
 
 @Entity()
 export class Tasks {
@@ -26,6 +26,11 @@ export class Tasks {
   @Column()
   @IsBoolean()
   completed: boolean;
+
+  @Column()
+  @IsDate()
+  @IsMinDate(new Date(), { message: "Please enter a valid date or greater" })
+  date: Date;
 
   @Column()
   @CreateDateColumn()

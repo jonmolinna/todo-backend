@@ -1,4 +1,4 @@
-import { IsNotEmpty, Length } from "class-validator";
+import { IsBoolean, IsNotEmpty, Length } from "class-validator";
 import {
   Column,
   CreateDateColumn,
@@ -19,6 +19,10 @@ export class Lists {
   @IsNotEmpty()
   @Length(1, 20)
   nameList: string;
+
+  @Column()
+  @IsBoolean()
+  flag: boolean;
 
   @Column()
   @CreateDateColumn()
