@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
+import { SECRET_TOKEN } from "../config";
 
 export const generatedToken = (user) => {
   const token = jwt.sign(
@@ -9,7 +10,7 @@ export const generatedToken = (user) => {
       firstName: user.firstName,
       lastName: user.lastName,
     },
-    "ULTRA_SECRET",
+    SECRET_TOKEN,
     { expiresIn: "1d" }
   );
 
@@ -24,7 +25,7 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const bearerToken = token.split(" ")[1];
-    const decoded = jwt.verify(bearerToken, "ULTRA_SECRET");
+    const decoded = jwt.verify(bearerToken, SECRET_TOKEN);
     res.locals.userToken = decoded;
   } catch (err) {
     return res.status(401).json({ msg: "You do not have authorization" });

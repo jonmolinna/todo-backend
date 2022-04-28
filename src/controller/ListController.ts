@@ -85,7 +85,6 @@ export class ListController {
 
       const list = await listRepository.findOne({
         relations: {
-          user: true,
           tasks: true,
         },
         where: {
@@ -94,6 +93,11 @@ export class ListController {
           },
           id: listId,
           flag: true,
+        },
+        order: {
+          tasks: {
+            createdAt: "desc",
+          },
         },
       });
 

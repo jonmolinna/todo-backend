@@ -95,7 +95,10 @@ export function IsMinDate(
         validate(value: any, args: ValidationArguments) {
           const [relatedPropertyName] = args.constraints;
           const relatedValue = (args.object as any)[relatedPropertyName];
-          return new Date(value).getTime() > new Date().getTime();
+          return (
+            new Date(value).toLocaleDateString() >=
+            new Date().toLocaleDateString()
+          );
         },
       },
     });

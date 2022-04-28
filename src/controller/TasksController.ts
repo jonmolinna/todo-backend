@@ -76,7 +76,7 @@ export class TasksController {
       if (task.affected === 0) {
         return res.status(404).json({ msg: "Task not found" });
       } else if (task.affected === 1) {
-        return res.status(200).json({ msg: "Task deleted" });
+        return res.status(200).json({ msg: "Task deleted", task });
       }
     } catch (err) {
       return res.status(500).json(err);

@@ -12,6 +12,7 @@ AppDataSource.initialize()
     console.log("BD is Connected");
   })
   .catch((err) => {
+    console.log(err);
     console.log("Ocurrion un error");
   });
 
@@ -26,6 +27,4 @@ app.use(cors());
 app.use("/", router);
 
 // Start express server
-app.listen(PORT, () =>
-  console.log(`Server running on port http://localhost:${PORT}`)
-);
+app.listen(PORT, () => console.log(`Server running`));

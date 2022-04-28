@@ -13,6 +13,7 @@ npm install bcryptjs
 npm install jsonwebtoken
 npm install @types/jsonwebtoken -D
 npm install dotenv
+npm i --save-dev @types/cors
 
 Para ejecutar
 -------------------------
