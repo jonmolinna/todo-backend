@@ -11,7 +11,7 @@ import {
 export const AppDataSource = new DataSource({
   type: "postgres",
   host: DB_HOST,
-  port: parseInt(DB_PORT),
+  port: DB_PORT,
   username: DB_USER,
   password: DB_PASSWORD,
   database: DB_DATABASENAME,
@@ -20,7 +20,7 @@ export const AppDataSource = new DataSource({
   ssl: {
     rejectUnauthorized: false,
   },
-  entities: ["src/entity/**/*.ts", "./entity/**/*.js"],
+  entities: ["build/entity/**/*.ts", "./entity/**/*.js"],
   migrations: ["src/migration/**/*.ts", "./migration/**/*.js"],
   subscribers: ["src/subscriber/**/*.ts", "./subscriber/**/*.js"],
 });

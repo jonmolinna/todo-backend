@@ -14,9 +14,15 @@ npm install jsonwebtoken
 npm install @types/jsonwebtoken -D
 npm install dotenv
 npm i --save-dev @types/cors
+npm install rimraf -D
+npm i --save-dev @types/bcryptjs
 
 Para ejecutar
 -------------------------
 npm start
 npm run dev
 npm run build
+
+json
+-----------------------
+"start": "ts-node src/index.ts",

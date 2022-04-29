@@ -4,12 +4,14 @@
          "es5",
          "es6"
       ],
-      "target": "es5",
-      "module": "commonjs",
+      "target": "ES2016",
+      "module": "CommonJS",
       "moduleResolution": "node",
       "outDir": "./build",
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
-      "sourceMap": true
-   }
+      "sourceMap": true,
+
+      "forceConsistentCasingInFileNames": true, // distinción entre mayúsculas y minúsculas
+   },
 }
