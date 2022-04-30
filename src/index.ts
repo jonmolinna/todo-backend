@@ -24,6 +24,9 @@ app.use(express.json());
 app.use(cors());
 
 // Rutas
+app.use("/", (req, res) => {
+  res.status(200).json({ msg: "I am from backend" });
+});
 app.use("/", router);
 
 // Start express server
