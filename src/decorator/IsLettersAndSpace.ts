@@ -4,13 +4,13 @@ import {
   ValidationArguments,
 } from "class-validator";
 
-export function IsMinDate(
-  property: Date,
+export function IsLettersAndSpace(
+  property: string,
   validationOptions?: ValidationOptions
 ) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
-      name: "IsMinDate",
+      name: "isLettersAndSpace",
       target: object.constructor,
       propertyName: propertyName,
       constraints: [property],
@@ -20,8 +20,9 @@ export function IsMinDate(
           const [relatedPropertyName] = args.constraints;
           const relatedValue = (args.object as any)[relatedPropertyName];
           return (
-            new Date(value).toLocaleDateString() >=
-            new Date().toLocaleDateString()
+            typeof value === "string" &&
+            typeof relatedValue === "string" &&
+            !!value.match(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/)
           );
         },
       },

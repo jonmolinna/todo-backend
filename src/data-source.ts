@@ -7,6 +7,9 @@ import {
   DB_PASSWORD,
   DB_DATABASENAME,
 } from "./config";
+import { Lists } from "./entity/Lists";
+import { Users } from "./entity/User";
+import { Tasks } from "./entity/Tasks";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -20,7 +23,8 @@ export const AppDataSource = new DataSource({
   ssl: {
     rejectUnauthorized: false,
   },
-  entities: ["build/entity/**/*.ts", "./entity/**/*.js"],
+  // entities: ["src/entity/**/*.ts", "./entity/**/*.js"],
+  entities: [Lists, Users, Tasks],
   migrations: ["src/migration/**/*.ts", "./migration/**/*.js"],
   subscribers: ["src/subscriber/**/*.ts", "./subscriber/**/*.js"],
 });

@@ -7,14 +7,11 @@ import {
   OneToMany,
 } from "typeorm";
 
-import {
-  IsLettersAndSpace,
-  IsUserName,
-  IsUserAlreadyExist,
-} from "../decorator/Validation";
+import { IsLettersAndSpace } from "../decorator/IsLettersAndSpace";
+import { IsUserAlreadyExist } from "../decorator/IsExistUserName";
+import { IsUserName } from "../decorator/IsUserNameValid";
 import * as bcrypt from "bcryptjs";
 import { Lists } from "./Lists";
-import { Tasks } from "./Tasks";
 
 @Entity()
 export class Users {
